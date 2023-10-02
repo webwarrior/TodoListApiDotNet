@@ -12,5 +12,6 @@ namespace TodoList.Api.DataServices.Interfaces
         public Task<TodoItem> GetTodoItem(Guid id);
         public Task<TodoResponse> PutTodoItem(Guid id, TodoItem todoItem);
         public Task<TodoResponse> PostTodoItem(TodoItem todoItem);
+        public Task<TodoResponse> DeleteTodoItem(Guid id);
     }
 }

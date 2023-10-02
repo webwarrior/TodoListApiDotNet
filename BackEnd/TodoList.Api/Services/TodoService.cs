@@ -83,5 +83,25 @@ namespace TodoList.Api.Services
 
             return todoResponse;
         }
+
+        public async Task<TodoResponse> RemoveItem(Guid id)
+        {
+            TodoResponse todoResponse = new TodoResponse();
+            todoResponse.Success = false;
+
+            if (id == null)
+            {
+                todoResponse.Success = false;
+                todoResponse.Description = "The ID is missing"; // Give a valid user the reason why the bad request - or
+                // Return non descriptive string if in order to avaoid hackers exploiting system
+                todoResponse.Description = "Bad request";
+                todoResponse.todoItem = null;
+                return todoResponse;
+            }
+
+            todoResponse = await _todoDataService.DeleteTodoItem(id);
+
+            return todoResponse;
+        }
     }
 }

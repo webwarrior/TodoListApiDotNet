@@ -21,18 +21,21 @@ namespace TodoList.Api.DataServices
             _context = dbContext;
         }
 
+        // Get List of items
         public async Task<List<TodoItem>> GetTodoItems()
         {
             List<TodoItem> results = await _context.TodoItems.Where(x => !x.IsCompleted).ToListAsync();
             return results;
         }
 
+        //Get Item By Id
         public async Task<TodoItem> GetTodoItem(Guid id)
         {
             var result = await _context.TodoItems.FindAsync(id);
             return result;
         }
 
+        // Update
         public async Task<TodoResponse> PutTodoItem(Guid id, TodoItem todoItem)
         {
             TodoResponse todoResponse = new TodoResponse();
@@ -62,6 +65,7 @@ namespace TodoList.Api.DataServices
             return todoResponse;
         }
 
+        // Add New
         public async Task<TodoResponse> PostTodoItem(TodoItem todoItem)
         {
             TodoResponse todoResponse = new TodoResponse();
@@ -91,6 +95,36 @@ namespace TodoList.Api.DataServices
 
             todoResponse.Success = true;
             todoResponse.todoItem = todoItem;
+
+            return todoResponse;
+        }
+
+        // Delete
+        public async Task<TodoResponse> DeleteTodoItem(Guid id)
+        {
+            TodoResponse todoResponse = new TodoResponse();
+            todoResponse.Success = false; 
+            
+            var item = _context.TodoItems.FirstOrDefault(i => i.Id == id);
+            if (item == null)
+            {
+                throw new Exception("Item not found");
+            }
+
+            _context.TodoItems.Remove(item);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                todoResponse.Description = "The Wheels came off - run!";
+            }
+
+            _context.SaveChanges();
+            todoResponse.Success = true;
+            todoResponse.todoItem = null;
 
             return todoResponse;
         }

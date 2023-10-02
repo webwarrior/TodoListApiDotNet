@@ -13,5 +13,7 @@ namespace TodoList.Api.Services.Intefaces
         public Task<List<TodoItem>> GetTodoItems();
         public Task<TodoResponse> PostTodoItem(TodoItem todoItem);
         public Task<TodoItem> GetTodoItem(Guid id);
+        public Task<TodoResponse> PutTodoItem(Guid id, TodoItem todoItem);
+        public Task<TodoResponse> RemoveItem(Guid id);
     }
 }

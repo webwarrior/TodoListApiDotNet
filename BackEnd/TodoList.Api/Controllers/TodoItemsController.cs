@@ -75,7 +75,7 @@ namespace TodoList.Api.Controllers
         {
             if (todoItem == null)
             {
-                return BadRequest("Todo Object is required"); ;
+                return BadRequest("Todo Object is required");
             }
 
             TodoResponse response = await _todoService.PostTodoItem(todoItem);
@@ -86,6 +86,52 @@ namespace TodoList.Api.Controllers
             {
                 return CreatedAtAction(nameof(GetTodoItems), response.todoItem.Id, response.todoItem);
             }
-        } 
+        }
+
+        // POST: api/TodoItems 
+        [HttpPost]
+        public async Task<IActionResult> PostNewTodoItem(string description)
+        {
+            if (string.IsNullOrEmpty(description))
+            {
+                return BadRequest("Description is required");
+            }
+
+            TodoItem todoItem = new TodoItem();
+            todoItem.Description = description;
+
+            TodoResponse response = await _todoService.PostTodoItem(todoItem);
+
+            if (!response.Success)
+            {
+                return BadRequest(response.Description);
+            }
+            else
+            {
+                return CreatedAtAction(nameof(GetTodoItems), response.todoItem.Id, response.todoItem);
+            }
+        }
+
+        // DELETE: api/TodoItems/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteTodoItem(Guid id)
+        {
+            var todoItem = _todoService.GetTodoItem(id);
+            if (todoItem == null)
+            {
+                return NotFound();
+            }
+
+            TodoResponse response = await _todoService.RemoveItem(id);
+
+            if (!response.Success)
+            {
+                return BadRequest(response.Description);
+            }
+            else
+            {
+                return NoContent();
+            }
+        }
     }
 }
