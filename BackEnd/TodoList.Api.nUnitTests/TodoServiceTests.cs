@@ -134,5 +134,20 @@ namespace TodoList.Api.nUnitTests
             Assert.IsFalse(failed);
             Assert.That(failedMessage, Is.EqualTo("Description is required"));
         }
+
+        [Test]
+        public void RemoveItem_ShouldDeleteItem()
+        {
+            var item = new TodoItem
+            {
+                Description = "Item to delete"
+            };
+
+            _ = _service.PostTodoItem(item);
+            _ = _service.RemoveItem(item.Id);
+
+            Assert.IsNotNull(_service.GetTodoItem(item.Id).Result);            
+            Assert.IsNull(_service.GetTodoItem(item.Id).Result);
+        }
     }
 }
