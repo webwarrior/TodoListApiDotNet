@@ -39,6 +39,11 @@ namespace TodoList.Api.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetTodoItem(Guid id)
         {
+            if (id.ToString() == "")
+            {
+                return BadRequest("Id is required"); ;
+            }
+
             var result = await _todoService.GetTodoItem(id);
 
             if (result == null)
@@ -56,7 +61,12 @@ namespace TodoList.Api.Controllers
             {
                 return BadRequest("Todo Object is required"); ;
             }
-            
+
+            if (id.ToString() == "")
+            {
+                return BadRequest("Id is required"); ;
+            }
+
             TodoResponse response = await _todoService.PostTodoItem(todoItem);
 
             if (!response.Success)

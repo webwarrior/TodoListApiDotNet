@@ -89,7 +89,7 @@ namespace TodoList.Api.Services
             TodoResponse todoResponse = new TodoResponse();
             todoResponse.Success = false;
 
-            if (id == null)
+            if (id.ToString() == "")
             {
                 todoResponse.Success = false;
                 todoResponse.Description = "The ID is missing"; // Give a valid user the reason why the bad request - or
